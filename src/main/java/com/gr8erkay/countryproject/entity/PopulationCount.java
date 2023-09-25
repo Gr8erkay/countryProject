@@ -1,4 +1,4 @@
-package com.gr8erkay.klashaproject.entity;
+package com.gr8erkay.countryproject.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

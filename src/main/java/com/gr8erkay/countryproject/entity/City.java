@@ -1,4 +1,4 @@
-package com.gr8erkay.klashaproject.entity;
+package com.gr8erkay.countryproject.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,9 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class City {
-    private String name;
-    private  String country;
-    private Integer population;
+    private String city;
+    private String country;
+    private List<PopulationCount> populationCounts;
 
 
 }

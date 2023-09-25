@@ -1,4 +1,4 @@
-package com.gr8erkay.klashaproject.entity;
+package com.gr8erkay.countryproject.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +21,8 @@ public class Country {
     private String currency;
     private String iso2;
     private String iso3;
+    private Double lat;
+    private Double longitude;
 
 
 
