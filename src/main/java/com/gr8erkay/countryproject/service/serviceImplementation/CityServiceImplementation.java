@@ -7,16 +7,12 @@ import com.gr8erkay.countryproject.model.responseDTO.CountryResponse;
 import com.gr8erkay.countryproject.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
-import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,19 +21,19 @@ import java.util.Map;
 public class CityServiceImplementation implements CountryService {
 
     @Value("${external.api.url}")
-    private String apiUrl; // Set this in application.properties or application.yml
+    private String apiUrl;
 
     private WebClient webClient;
 
     public CityServiceImplementation(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://countriesnow.space/api/v0.1/countries")
-                .filter(ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
-                    if (clientResponse.statusCode().is3xxRedirection()) {
-                        String newUrl = clientResponse.headers().header("Location").get(0);
-                        return webClient.get().uri(newUrl).retrieve().bodyToMono(org.springframework.web.reactive.function.client.ClientResponse.class);
-                    }
-                    return Mono.just(clientResponse);
-                }))
+//                .filter(ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
+//                    if (clientResponse.statusCode().is3xxRedirection()) {
+//                        String newUrl = clientResponse.headers().header("Location").get(0);
+//                        return webClient.get().uri(newUrl).retrieve().bodyToMono(org.springframework.web.reactive.function.client.ClientResponse.class);
+//                    }
+//                    return Mono.just(clientResponse);
+//                }))
                 .build();
     }
 
@@ -75,63 +71,8 @@ public List<String> getCityInfo(String country) {
                 .retrieve()
                 .bodyToFlux(City.class)
                 .collectList()
-                .block(); // Blocking call; handle differently in a reactive application
+                .block();
     }
-
-//    @Override
-//    public List<City> getMostPopulatedCities(int N) {
-//        List<City> mostPopulatedCities = new ArrayList<>();
-//
-//        // Fetch cities from Italy, New Zealand, and Ghana
-//        List<City> italyCities = countryService.getCitiesByCountry("Italy");
-//        List<City> newZealandCities = countryService.getCitiesByCountry("New Zealand");
-//        List<City> ghanaCities = countryService.getCitiesByCountry("Ghana");
-//
-//        // Combine all cities
-//        List<City> allCities = new ArrayList<>();
-//        allCities.addAll(italyCities);
-//        allCities.addAll(newZealandCities);
-//        allCities.addAll(ghanaCities);
-//
-//        // Sort by population in descending order
-//        allCities.sort(Comparator.comparing(City::getPopulation).reversed());
-//
-//        // Get the most populated N cities
-//        for (int i = 0; i < N && i < allCities.size(); i++) {
-//            mostPopulatedCities.add(allCities.get(i));
-//        }
-//
-//        return mostPopulatedCities;
-//    }
-
-
-//
-//    public CountryResponse getCountryInfo(String country) {
-//        CountryRequest countryRequest = new CountryRequest();
-//        countryRequest.setCountry(country);
-//        Mono<CountryResponse> responseMono = webClientBuilder.build()
-//                .get()
-//                .uri(uriBuilder -> uriBuilder
-//                        .path(apiUrl + "/countries/population/country")
-//                        .queryParam("country", country)
-//                        .build())
-//                .retrieve()
-//                .bodyToMono(CountryResponse.class);
-//
-//        return responseMono.block();
-//    }
-//
-//    private List<City> getCitiesFromApi() {
-//        Mono<City[]> responseMono = webClientBuilder.build()
-//                .get()
-//                .uri(apiUrl + "/countries/population/cities")
-//                .retrieve()
-//                .bodyToMono(City[].class);
-//
-//        City[] citiesArray = responseMono.block();
-//        return Arrays.asList(citiesArray);
-//    }
-
     @Override
     public CountryResponse getCitiesAndStatesByCountry(String country) {
         // Create request bodies
@@ -228,5 +169,78 @@ public List<String> getCityInfo(String country) {
                 })
                 .block(); // Blocking call, handle differently in a reactive application
     }
+
+//    @Override
+//public List<City> getMostPopulatedCities(int N) {
+//    // Build the URI with parameters
+//    String uri = UriComponentsBuilder.fromUriString("/population/cities/filter")
+//            .queryParam("limit", N)
+//            .queryParam("order", "dsc")
+//            .queryParam("orderBy", "population")
+//            .queryParam("country", "nigeria")
+//            .toUriString();
+//
+//    return webClient.get()
+//            .uri(uri)
+//            .retrieve()
+//            .bodyToFlux(City.class)
+//            .collectList()
+//            .block(); // Blocking call; handle differently in a reactive application
+//}
+
+//    @Override
+//    public List<City> getMostPopulatedCities(int N) {
+//        List<City> mostPopulatedCities = new ArrayList<>();
+//
+//        // Fetch cities from Italy, New Zealand, and Ghana
+//        List<City> italyCities = countryService.getCitiesByCountry("Italy");
+//        List<City> newZealandCities = countryService.getCitiesByCountry("New Zealand");
+//        List<City> ghanaCities = countryService.getCitiesByCountry("Ghana");
+//
+//        // Combine all cities
+//        List<City> allCities = new ArrayList<>();
+//        allCities.addAll(italyCities);
+//        allCities.addAll(newZealandCities);
+//        allCities.addAll(ghanaCities);
+//
+//        // Sort by population in descending order
+//        allCities.sort(Comparator.comparing(City::getPopulation).reversed());
+//
+//        // Get the most populated N cities
+//        for (int i = 0; i < N && i < allCities.size(); i++) {
+//            mostPopulatedCities.add(allCities.get(i));
+//        }
+//
+//        return mostPopulatedCities;
+//    }
+
+
+//
+//    public CountryResponse getCountryInfo(String country) {
+//        CountryRequest countryRequest = new CountryRequest();
+//        countryRequest.setCountry(country);
+//        Mono<CountryResponse> responseMono = webClientBuilder.build()
+//                .get()
+//                .uri(uriBuilder -> uriBuilder
+//                        .path(apiUrl + "/countries/population/country")
+//                        .queryParam("country", country)
+//                        .build())
+//                .retrieve()
+//                .bodyToMono(CountryResponse.class);
+//
+//        return responseMono.block();
+//    }
+//
+//    private List<City> getCitiesFromApi() {
+//        Mono<City[]> responseMono = webClientBuilder.build()
+//                .get()
+//                .uri(apiUrl + "/countries/population/cities")
+//                .retrieve()
+//                .bodyToMono(City[].class);
+//
+//        City[] citiesArray = responseMono.block();
+//        return Arrays.asList(citiesArray);
+//    }
+
 }
 

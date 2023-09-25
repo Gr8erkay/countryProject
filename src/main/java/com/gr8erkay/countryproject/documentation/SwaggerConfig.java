@@ -1,21 +1,16 @@
 package com.gr8erkay.countryproject.documentation;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition
 public class SwaggerConfig {
-
-    // Get the Dependencies, setup docs
-
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
@@ -34,13 +29,6 @@ public class SwaggerConfig {
                                 .name("KLASHA JAVA ASSESSMENT PROJECT")
                                 .url("https://github.com/Gr8erkay")
                         )
-                )
-                .components(new Components()
-                        .addSecuritySchemes("bearer",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT"))
                 );
 
 

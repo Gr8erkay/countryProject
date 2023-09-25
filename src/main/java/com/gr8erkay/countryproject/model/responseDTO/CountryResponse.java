@@ -1,6 +1,5 @@
 package com.gr8erkay.countryproject.model.responseDTO;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
